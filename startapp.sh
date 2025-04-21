@@ -21,8 +21,7 @@ socat TCP-LISTEN:9222,fork,reuseaddr,bind=0.0.0.0 TCP:127.0.0.1:9223 &
 exec chromium-browser \
     --user-data-dir=/config/userdata \
     --disk-cache-dir=/config/cache \
-    --remote-debugging-address=127.0.0.1 \
+    --remote-debugging-address=0.0.0.0 \
     --remote-debugging-port=9223 \
-    --remote-allow-origins=* \
     ${CHROME_CUSTOM_ARGS:-} \
     about:blank
