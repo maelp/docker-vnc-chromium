@@ -4,7 +4,9 @@ A Docker container that runs Chromium browser accessible via VNC, allowing for p
 
 ## Features
 
-- Headless Chromium browser accessible via VNC
+- Chromium browser with GUI accessible via VNC
+- Enhanced font rendering with multi-language support
+- Improved performance with SwiftShader support
 - Persistent cookie and session storage
 - Remote debugging enabled
 - Web interface for easy access

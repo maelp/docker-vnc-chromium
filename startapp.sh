@@ -32,5 +32,11 @@ if [ -n "${CHROME_CUSTOM_ARGS}" ]; then
     ARGS="$ARGS ${CHROME_CUSTOM_ARGS}"
 fi
 
+# Add SwiftShader if available (for better software rendering)
+if [ -d "/usr/lib/chromium/swiftshader" ]; then
+    echo "SwiftShader detected, enabling improved software rendering"
+    export LIBGL_DRIVERS_PATH=/usr/lib/chromium/swiftshader
+fi
+
 echo "Starting Chromium browser..."
 exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache --password-store=basic $CHROMIUM_FLAGS $ARGS

@@ -4,13 +4,12 @@ FROM jlesage/baseimage-gui:alpine-3.19-v4
 # Docker image version is provided via build arg
 ARG DOCKER_IMAGE_VERSION=
 
-# Define software versions
-ARG CHROMIUM_VERSION=124.0.6367.78-r0
-
-# Install Chromium and VNC server
+# Install Chromium and VNC server with enhanced fonts and better rendering
 RUN add-pkg \
-    chromium=${CHROMIUM_VERSION} \
+    chromium-swiftshader \
     ttf-freefont \
+    font-noto-emoji \
+    font-wqy-zenhei \
     nss \
     freetype \
     harfbuzz \
@@ -27,6 +26,9 @@ RUN add-pkg \
     font-dejavu \
     xdotool
 
+# Copy font configuration for better rendering
+COPY local.conf /etc/fonts/local.conf
+
 # Set internal environment variables
 RUN \
     set-cont-env APP_NAME "Chromium" && \
@@ -41,7 +43,9 @@ ENV \
     CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-extensions --hide-scrollbars" \
     KEEP_APP_RUNNING=1 \
     DBUS_SESSION_BUS_ADDRESS="disabled" \
-    VNC_RESOLUTION="1920x1080"
+    VNC_RESOLUTION="1920x1080" \
+    CHROME_BIN=/usr/bin/chromium-browser \
+    CHROME_PATH=/usr/lib/chromium/
 
 # Create necessary directories for user data and configurations with proper permissions
 RUN mkdir -p /config/userdata /config/cache /config/nssdb && \
