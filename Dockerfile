@@ -23,7 +23,7 @@ RUN mkdir -p /usr/src/app \
     && chown -R chrome:chrome /usr/src/app
 
 # Set environment variables
-ENV CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-extensions --hide-scrollbars" \
+ENV CHROME_CUSTOM_ARGS="--no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --hide-scrollbars" \
     KEEP_APP_RUNNING=1 \
     VNC_RESOLUTION="1920x1080" \
     CHROME_BIN=/usr/bin/chromium-browser \
