@@ -120,7 +120,26 @@ Where:
 
 ## Docker Hub Publication
 
-To push the image to Docker Hub:
+### Building and Pushing Multi-Architecture Images
+
+This repository includes a script to build and push multi-architecture images (AMD64 and ARM64) that work across different platforms:
+
+```bash
+# Login to Docker Hub first
+docker login
+
+# Build and push with default version (1.0)
+./build_and_push.sh
+
+# Or specify a custom version
+./build_and_push.sh 1.1
+```
+
+The script uses Docker Buildx to create images for multiple architectures, ensuring that when users pull the image, they automatically get the correct version for their platform.
+
+### Manual Build and Push
+
+If you prefer to build manually for a single architecture:
 
 1. Build the image:
 ```bash
