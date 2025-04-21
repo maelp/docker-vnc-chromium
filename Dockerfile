@@ -38,8 +38,9 @@ ENV CHROMIUM_FLAGS=""
 ENV \
     CHROME_OPEN_URL= \
     CHROME_KIOSK=0 \
-    CHROME_CUSTOM_ARGS="" \
-    KEEP_APP_RUNNING=1
+    CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222" \
+    KEEP_APP_RUNNING=1 \
+    DBUS_SESSION_BUS_ADDRESS="unix:path=/tmp/dbus-session"
 
 # Create necessary directories for user data and configurations
 RUN mkdir -p /config/userdata /config/cache

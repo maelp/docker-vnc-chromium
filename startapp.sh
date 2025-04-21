@@ -7,6 +7,9 @@ set -u  # Treat unset variables as an error
 rm -rf /config/userdata/SingletonLock
 rm -rf /config/userdata/SingletonCookie
 
+# Create data directories if they don't exist
+mkdir -p /config/userdata /config/cache
+
 # Handle custom parameters
 ARGS=""
 
@@ -26,4 +29,4 @@ if [ -n "${CHROME_CUSTOM_ARGS}" ]; then
 fi
 
 echo "Starting Chromium browser..."
-exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache --no-first-run --no-sandbox --disable-setuid-sandbox $CHROMIUM_FLAGS $ARGS
+exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache $CHROMIUM_FLAGS $ARGS
