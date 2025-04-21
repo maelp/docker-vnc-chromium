@@ -4,11 +4,15 @@ set -e  # Exit on error
 set -u  # Treat unset variables as an error
 
 # Clean up any lock files that might exist
-rm -rf /config/userdata/SingletonLock
-rm -rf /config/userdata/SingletonCookie
+rm -rf /config/userdata/SingletonLock /config/userdata/SingletonCookie
+[ -d "/config/userdata/Default" ] && rm -rf /config/userdata/Default/Singleton*
 
-# Create data directories if they don't exist
-mkdir -p /config/userdata /config/cache
+# Create NSS directory in /config which should be writable
+mkdir -p /config/nssdb
+export NSS_DB_DIR=/config/nssdb
+
+# Reset environment variable for DBus to prevent errors
+export DBUS_SESSION_BUS_ADDRESS=disabled
 
 # Handle custom parameters
 ARGS=""
@@ -29,4 +33,4 @@ if [ -n "${CHROME_CUSTOM_ARGS}" ]; then
 fi
 
 echo "Starting Chromium browser..."
-exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache $CHROMIUM_FLAGS $ARGS
+exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache --password-store=basic $CHROMIUM_FLAGS $ARGS
