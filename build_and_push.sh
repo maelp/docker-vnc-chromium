@@ -3,8 +3,14 @@
 # Exit on any error
 set -e
 
-# Default version if not provided
-VERSION=${1:-"1.0"}
+# Check if version is provided
+if [ -z "$1" ]; then
+  echo "Error: Version parameter is required"
+  echo "Please use: ./build_and_push.sh 2.0"
+  exit 1
+fi
+
+VERSION=$1
 IMAGE_NAME="maelp/docker-vnc-chromium"
 
 echo "Building and pushing $IMAGE_NAME:$VERSION for multiple architectures"
