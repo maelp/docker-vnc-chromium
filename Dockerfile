@@ -17,12 +17,6 @@ RUN apk upgrade --no-cache --available \
 # Copy font configuration for better rendering
 COPY local.conf /etc/fonts/local.conf
 
-# Set internal environment variables
-RUN \
-    set-cont-env APP_NAME "Chromium" && \
-    set-cont-env APP_VERSION "$CHROMIUM_VERSION" && \
-    set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION"
-
 # Add Chrome as a user
 RUN mkdir -p /usr/src/app \
     && adduser -D chrome \
@@ -36,7 +30,7 @@ ENV CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --d
     CHROME_PATH=/usr/lib/chromium/
 
 # Create necessary directories for user data and configurations with proper permissions
-RUN mkdir -p /config/userdata /config/cache /config/nssdb && \
+RUN mkdir -p /config/userdata /config/cache && \
     chmod -R 777 /config
 
 # Add the startup script
