@@ -23,4 +23,4 @@ if [ -n "${CHROME_CUSTOM_ARGS}" ]; then
 fi
 
 echo "Starting Chromium browser..."
-exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache ${CHROMIUM_FLAGS:-} $ARGS
+exec chromium-browser --user-data-dir=/config/userdata --disk-cache-dir=/config/cache ${CHROMIUM_FLAGS:-} $ARGS
