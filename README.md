@@ -179,10 +179,10 @@ docker run -d \
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| CHROMIUM_FLAGS | Core flags for Chromium | `--no-sandbox --disable-gpu --disable-dev-shm-usage --disable-software-rasterizer --ignore-gpu-blocklist --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --hide-scrollbars` |
+| CHROMIUM_FLAGS | Core flags for Chromium | Empty |
 | CHROME_OPEN_URL | URL to open on startup | Empty |
 | CHROME_KIOSK | Enable kiosk mode (1=enabled, 0=disabled) | `0` |
-| CHROME_CUSTOM_ARGS | Additional custom arguments | Empty |
+| CHROME_CUSTOM_ARGS | Custom arguments for Chromium | Empty |
 | KEEP_APP_RUNNING | Auto-restart the application if it crashes | `1` (enabled) |
 
 ### Security Variables
@@ -207,8 +207,20 @@ docker run -d \
 ## Persistent Data
 
 Browser data is stored in:
-- `/config/chromium-user-data`: User profile, cookies, history, etc.
-- `/config/chromium-cache`: Browser cache
+- `/config/userdata`: User profile, cookies, history, etc.
+- `/config/cache`: Browser cache
+
+You can mount these directories separately for more control over data persistence and backup strategies:
+
+```bash
+# Example: Mounting userdata and cache separately
+docker run -d \
+  --name chromium-vnc \
+  -p 5800:5800 \
+  -v /path/to/userdata:/config/userdata \
+  -v /path/to/cache:/config/cache \
+  maelp/docker-vnc-chromium:latest
+```
 
 ## License
 

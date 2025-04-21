@@ -4,8 +4,8 @@ set -e  # Exit on error
 set -u  # Treat unset variables as an error
 
 # Clean up any lock files that might exist
-rm -rf /config/chromium-user-data/SingletonLock
-rm -rf /config/chromium-user-data/SingletonCookie
+rm -rf /config/userdata/SingletonLock
+rm -rf /config/userdata/SingletonCookie
 
 # Handle custom parameters
 ARGS=""
@@ -26,4 +26,4 @@ if [ -n "${CHROME_CUSTOM_ARGS}" ]; then
 fi
 
 echo "Starting Chromium browser..."
-exec chromium --user-data-dir=/config/chromium-user-data --disk-cache-dir=/config/chromium-cache --no-first-run $CHROMIUM_FLAGS $ARGS
+exec chromium --user-data-dir=/config/userdata --disk-cache-dir=/config/cache --no-first-run --no-sandbox --disable-setuid-sandbox $CHROMIUM_FLAGS $ARGS

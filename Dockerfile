@@ -34,15 +34,15 @@ RUN \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION"
 
 # Set environment variables
-ENV CHROMIUM_FLAGS="--no-sandbox --disable-gpu --disable-dev-shm-usage --disable-software-rasterizer --ignore-gpu-blocklist --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --hide-scrollbars"
+ENV CHROMIUM_FLAGS=""
 ENV \
     CHROME_OPEN_URL= \
     CHROME_KIOSK=0 \
-    CHROME_CUSTOM_ARGS= \
+    CHROME_CUSTOM_ARGS="" \
     KEEP_APP_RUNNING=1
 
 # Create necessary directories for user data and configurations
-RUN mkdir -p /config/chromium-user-data /config/chromium-cache
+RUN mkdir -p /config/userdata /config/cache
 
 # Add the startup script
 COPY startapp.sh /startapp.sh
