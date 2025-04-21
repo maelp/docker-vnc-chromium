@@ -38,7 +38,7 @@ ENV CHROMIUM_FLAGS=""
 ENV \
     CHROME_OPEN_URL= \
     CHROME_KIOSK=0 \
-    CHROME_CUSTOM_ARGS="--headless=new --no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-extensions --hide-scrollbars" \
+    CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-extensions --hide-scrollbars" \
     KEEP_APP_RUNNING=1 \
     DBUS_SESSION_BUS_ADDRESS="disabled" \
     VNC_RESOLUTION="1920x1080"
