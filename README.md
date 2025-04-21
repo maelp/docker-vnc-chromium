@@ -8,7 +8,7 @@ A Docker container that runs Chromium browser accessible via VNC, allowing for p
 - Enhanced font rendering with multi-language support
 - Improved performance with SwiftShader support
 - Persistent cookie and session storage
-- Remote debugging enabled
+- Remote debugging enabled (port 9222)
 - Web interface for easy access
 - Based on Alpine Linux for a lightweight footprint
 - Optional security features:
@@ -29,9 +29,10 @@ The container:
 1. Uses `jlesage/baseimage-gui:alpine-3.19-v4` as the base image
 2. Installs Chromium browser and TigerVNC server
 3. Configures persistent storage for browser data/cookies in `/config` directories
-4. Exposes ports 5800 (web interface) and 5900 (VNC)
+4. Exposes ports 5800 (web interface), 5900 (VNC), and 9222 (Chromium remote debugging)
 5. Starts VNC server with 1920x1080 resolution
 6. Launches Chromium with remote debugging enabled
+7. Uses socat to proxy the remote debugging interface (explained in the "Remote Debugging" section below)
 
 ## Installation
 
@@ -58,6 +59,7 @@ docker run -d \
   --name chromium-vnc \
   -p 5800:5800 \
   -p 5900:5900 \
+  -p 9222:9222 \
   -v /tmp/docker-vnc-chromium-config:/config \
   maelp/docker-vnc-chromium:latest
 ```
@@ -69,6 +71,7 @@ docker run --rm \
   --name chromium-vnc \
   -p 5800:5800 \
   -p 5900:5900 \
+  -p 9222:9222 \
   -v /tmp/docker-vnc-chromium-config:/config \
   maelp/docker-vnc-chromium:latest
 ```
@@ -104,6 +107,7 @@ docker run -d \
 Where:
 - Port 5800: Web interface for VNC
 - Port 5900: VNC server port
+- Port 9222: Chromium remote debugging interface
 - `/tmp/docker-vnc-chromium-config`: Local path for storing persistent browser data (use a permanent path for production)
 
 ### Connect to the browser
@@ -119,6 +123,38 @@ Where:
 |--------|------|------------|----------------|
 | Web Interface | 5800 | Works in any browser, no client needed | WEB_AUTHENTICATION variables |
 | VNC Client | 5900 | More responsive, potentially better performance | VNC_PASSWORD |
+| Remote Debugging | 9222 | Programmatic browser control, CDP protocol | None by default |
+
+## Remote Debugging
+
+The container exposes Chromium's remote debugging interface on port 9222, which can be used for:
+
+1. Programmatic browser control via Chrome DevTools Protocol (CDP)
+2. Integration with tools like Puppeteer, Selenium, or custom scripts
+3. Live debugging of web applications
+
+### How Remote Debugging Is Implemented
+
+The container uses a clever networking approach to ensure the debugging interface is properly accessible from outside:
+
+1. Chromium is configured to expose its debugging interface on an internal port (9223) bound to localhost (127.0.0.1)
+2. A socat proxy forwards external connections from 0.0.0.0:9222 to the internal 127.0.0.1:9223 
+3. This approach works around networking issues in Chromium when running inside the container environment
+
+**Why this approach?** 
+- When running in this container environment, Chromium's debugger doesn't properly accept external connections when directly binding to 0.0.0.0
+- The socat proxy provides a reliable way to expose the debugging interface externally without modifying Chromium itself
+
+### Using the Remote Debugging Interface
+
+To test that remote debugging is working:
+
+```bash
+# From your host machine
+curl http://localhost:9222/json
+```
+
+This should return JSON information about the available debugging targets (browser tabs). You can use this endpoint with CDP-compatible tools like Puppeteer.
 
 ## Docker Hub Publication
 

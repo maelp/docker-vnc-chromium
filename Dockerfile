@@ -4,7 +4,10 @@ FROM jlesage/baseimage-gui:alpine-3.19-v4
 # Docker image version is provided via build arg
 ARG DOCKER_IMAGE_VERSION=
 
-# Installs latest Chromium package.
+# Installs latest Chromium package and socat for port forwarding
+# Note: socat is used to forward external connections to Chromium's internal debugging port
+# This is necessary because Chromium in this environment doesn't properly accept external
+# connections when directly binding to 0.0.0.0
 RUN apk upgrade --no-cache --available \
     && apk add --no-cache \
     curl \
@@ -20,7 +23,7 @@ RUN apk upgrade --no-cache --available \
 COPY local.conf /etc/fonts/local.conf
 
 # Set environment variables
-ENV CHROME_CUSTOM_ARGS="--no-first-run --password-store=basic --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --hide-scrollbars --remote-allow-origins=* --remote-debugging-address=0.0.0.0"
+ENV CHROME_CUSTOM_ARGS="--no-first-run --password-store=basic --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --hide-scrollbars"
 ENV KEEP_APP_RUNNING=1
 ENV VNC_RESOLUTION="1920x1080"
 ENV CHROME_BIN=/usr/bin/chromium-browser
