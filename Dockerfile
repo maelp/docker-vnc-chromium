@@ -7,6 +7,8 @@ ARG DOCKER_IMAGE_VERSION=
 # Installs latest Chromium package.
 RUN apk upgrade --no-cache --available \
     && apk add --no-cache \
+    curl \
+    socat \
     chromium-swiftshader \
     ttf-freefont \
     font-noto-emoji \
@@ -18,7 +20,7 @@ RUN apk upgrade --no-cache --available \
 COPY local.conf /etc/fonts/local.conf
 
 # Set environment variables
-ENV CHROME_CUSTOM_ARGS="--no-first-run --password-store=basic --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --hide-scrollbars"
+ENV CHROME_CUSTOM_ARGS="--no-first-run --password-store=basic --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --hide-scrollbars --remote-allow-origins=* --remote-debugging-address=0.0.0.0"
 ENV KEEP_APP_RUNNING=1
 ENV VNC_RESOLUTION="1920x1080"
 ENV CHROME_BIN=/usr/bin/chromium-browser
