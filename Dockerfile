@@ -5,26 +5,14 @@ FROM jlesage/baseimage-gui:alpine-3.19-v4
 ARG DOCKER_IMAGE_VERSION=
 
 # Install Chromium and VNC server with enhanced fonts and better rendering
-RUN add-pkg \
+RUN apk upgrade --no-cache --available \
+    && apk add --no-cache \
     chromium-swiftshader \
     ttf-freefont \
     font-noto-emoji \
-    font-wqy-zenhei \
-    nss \
-    freetype \
-    harfbuzz \
-    alsa-lib \
-    dbus \
-    dbus-x11 \
-    mesa-dri-gallium \
-    mesa-egl \
-    mesa-gl \
-    xvfb \
-    tigervnc \
-    # Add UI improvements
-    adwaita-icon-theme \
-    font-dejavu \
-    xdotool
+    && apk add --no-cache \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    font-wqy-zenhei
 
 # Copy font configuration for better rendering
 COPY local.conf /etc/fonts/local.conf
@@ -35,14 +23,14 @@ RUN \
     set-cont-env APP_VERSION "$CHROMIUM_VERSION" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION"
 
+# Add Chrome as a user
+RUN mkdir -p /usr/src/app \
+    && adduser -D chrome \
+    && chown -R chrome:chrome /usr/src/app
+
 # Set environment variables
-ENV CHROMIUM_FLAGS=""
-ENV \
-    CHROME_OPEN_URL= \
-    CHROME_KIOSK=0 \
-    CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-extensions --hide-scrollbars" \
+ENV CHROME_CUSTOM_ARGS="--no-first-run --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage --disable-accelerated-2d-canvas --disable-webgl --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-extensions --hide-scrollbars" \
     KEEP_APP_RUNNING=1 \
-    DBUS_SESSION_BUS_ADDRESS="disabled" \
     VNC_RESOLUTION="1920x1080" \
     CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
